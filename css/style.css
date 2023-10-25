@@ -1,0 +1,249 @@
+/* 여백초기화 */
+* {margin:0; padding:0}
+
+/* 기본불릿제거 */
+ul li {list-style:none}
+
+/* 기본스타일 */
+body {font-family:"돋움"; font-size:12px; background:white}
+
+/* 링크스타일 */
+a, a:link {color:black; text-decoration:none}
+a:visited {color:black; text-decoration:none}
+a:hover {color:black; text-decoration:none}
+a:active {color:black; text-decoration:none}
+
+/* 가로400px이하 스마트폰 화면스타일 --------------------------------------*/
+@media(max-width:400px){
+	
+/*step1단계:상품선택하기 ------------------------------------------------- */	
+	h2 {border:0px solid black; padding-top:5px}
+	h2 img {width:150px; height:70px}
+	p {padding:10px; }
+	ul#menu {width:98%; border:0px solid aqua}
+	ul#menu li {float:left; width:50%; text-align:center}/*상품가로방향정렬*/
+
+	ul#menu li a {display:block; text-decoration:none; text-align:center}
+	ul#menu li a span {
+		display:block; padding-top:5px; padding-bottom:5px;
+		border:0px solid black
+	}
+	ul#menu li a img {width:150px; height:150px} /*상품이미지*/
+
+
+/*step2단계:선택한 상품 확인 및 수량정하고 담기 -------------------------- */		
+	div#step2 { 
+		display:none; border:0px solid blue; 
+		width:100%; height:100%; padding-top:30px; 
+		position:fixed; left:0; top:0; z-index:1000;
+		background:white;		
+	}	
+	/*사용자가 선택한 상품 이미지 보여주기*/
+	div#step2 p.img img.selectedImage {width:200px; height:200px; }
+
+	/* 상품수량, 더하기, 빼기 */
+	div#step2 div.eaWrap {font-size:20px; text-align:center}
+	div#step2 div.eaWrap button {
+		width:30px; height:30px; text-align:center; background-color:lightblue; 
+		border:1px solid lightblue; padding:0px 0px 0px 0px; font-size:25px
+	}
+	div#step2 div.eaWrap span {}
+	div#step2 div.eaWrap span#count {padding-left:5px; color:blue; font-weight:bold}
+
+	/* 상품 총 가격표시 */
+	div#step2 p {
+		border:0px solid red;
+		font-size:25px; font-weight:bold;
+		text-align:center;
+	}
+	div#step2 p span.total {border:0px solid aqua; color:red}
+	div#step2 p span.won {border:0px solid blue; color:red}
+
+    /* step2단계 하단버튼 */
+	div.buttonArea {
+		position:fixed; bottom:0; left:0; width:100%; height:50px; border:0 none/*none*/
+	}
+	div.buttonArea button {
+		display:block; width:25%; float:left; padding:10px 5px;/**/
+		font-size:15px; 
+	    border:0 none/*none*/; font-weight:bold;
+	}
+	/*담기버튼*/
+	div.buttonArea button.push {background:black; color:white} 
+	/*주문하기버튼*/
+	div.buttonArea button#buy {background:lightblue; color:black} 
+	/*상품목록버튼*/
+	div.buttonArea button.gotoList {background:lightblue; color:black} 
+	/*장바구니버튼*/
+	div.buttonArea button.cart {background:lightblue/*#ffcc33*/; color:black} 
+
+	/* 	div.bottonArea button#order {width:50%;}
+		div.buttonArea button#cancle { step2 취소버튼만 가로길이를 크게하기
+			width:100%; border:0px solid blue;
+		}
+
+	/*담기버튼*/
+	button#plus,button#plus2 {margin-top:10px; margin-bottom:10px}
+
+	/*div.buttonArea button#place {
+		width:200px; height:50px; margin-left:100px; margin-top:-85px;
+		background:#cc0000; color:white; border-radius:50px
+	}*/
+
+
+/*step3단계:장바구니 확인 및 결재방식 선택 스타일 ----------------------------------------- */
+	div#step3 { 
+		border:0px solid blue; display:none;
+		width:100%; height:100%;
+		position:fixed; left:0; top:0; background:white;
+		z-index:2000;
+	}
+	div#step3 h3 {
+		margin:30px 20px 20px 20px; padding-bottom:5px; 
+		font-size:30px; border-bottom:1px solid #ccc
+	}
+
+	/* 장바구니 영역 */
+	div.zone { 
+		margin-left:20px; margin-right:20px; padding:10px; 
+		border:1px solid #ccc; border-radius:10px; 
+		background:#eee; 
+	}
+	div.zone table.shoppingCart {width:100%; }
+	div.zone table.shoppingCart tr th {width:25%; font-size:15px; font-weight:bold}
+	div.zone table.shoppingCart tr th.first {width:10%}
+	div.zone table.shoppingCart tr th.last {width:15%}
+	div.zone table.shoppingCart tr td {text-align:center}
+	/*.shoppingCart_tbody td input[type='check'] {border:5px solid red} */
+	.shoppingCart_tbody td input.del,    .img1 {border:5px solid red}
+
+
+
+	/* step3, step4: 주문(결재)금액표시 */
+	div.orderAmount {
+		border:0px solid red;
+		margin-top:30px; line-height:120%;
+		font-size:25px; font-weight:bold;
+		text-align:center;
+	}
+	/* step3, step4: 총결재 금액표시 */
+	div.orderAmount span.txt1 {display:block}
+	div.orderAmount span.totalSum {color:red; border:0px solid aqua}
+	div.orderAmount span.txt2 {border:0px solid blue}
+
+
+	/*step4단계:결재이용수단 스타일*/
+	div#step4 { 
+		border:0px solid blue; display:none;
+		width:100%; height:100%;
+		position:fixed; left:0; top:0; background:white;
+		/*z-index:2000;*/
+
+	}
+	div#step4 h3 {
+		margin:30px 20px 20px 20px; padding-bottom:5px; 
+		font-size:30px; border-bottom:1px solid #ccc
+	}
+
+
+
+	/*카드결재*/
+	div#payOut {
+		border:0px solid blue; text-align:center; 
+
+	}
+	div#payOut a {
+		display:inline-block; width:100px; margin-right:30px; 
+		text-align:center; border:0px solid black
+	} 
+	div#payOut a img {width:120px; height:120px}
+	div#payOut a span {display:block; padding-top:10px}
+
+
+
+	div#step3 p span.card,div#step3 p span.cash {color:red} /*현금,카드글자*/
+	div#step3 div.buttonArea button#pay { /*결재버튼*/
+		width:33.33%/*200px*/; display:block; 
+	}	
+	div#step3 div.buttonArea button#cancle { /*취소버튼*/
+		width:33.33%/*200px*/
+	}
+	/*상품목록가기 버튼*/
+	div#step3 div.buttonArea button.gotoList {width:33.33%; background:#ccc;}
+	
+
+
+	/*div.buttonArea button {
+		display:block; width:25%; float:left; padding:10px 5px;
+		font-size:15px; 
+	    border:0 none
+	}*/
+
+
+
+
+
+
+	/*step5단계:결재이용수단 스타일*/
+	/*매장*/
+	div#store {
+		border:0px solid blue; display:none;
+		width:100%; height:100%;
+		position:fixed; left:0; top:0; background:white;
+		
+	}
+	div#store img {width:60px; height:60px}
+	div#store span.store {color:black; font-size:12px; float:center;}
+
+	/*포장*/
+	div#pack {
+		border:0px solid blue; display:none;
+		width:100%; height:100%;
+		position:fixed; left:0; top:0; background:white;
+		
+	}
+	div#pack img {width:60px; height:60px}
+	div#pack span.pack {color:black; font-size:12px; float:center}
+	
+	
+	/*step6단계:결재중 스타일*/
+	div#step6 {display:none; border:0px solid blue; float:center}
+	div#step6 img {
+		width:300px; height:300px;
+		margin-left:50px; margin-top:50px
+	}
+	div#step6 p {font-size:16px; }
+	div#step6 p span.credit_card {
+		font-size:20px; color:red; font-weight:bold; float:center;
+	}
+	div#step6 p span.star {
+		font-size:20px; color:red; float:center;
+		font-weight:bold; 
+	}
+	
+
+	/*step7단계:결재완료 스타일*/
+	div#step7 {
+		width:100%; height:100%; display:none;
+		border:1px solid black; float:center
+	}
+	div#step7 p {
+		font-size:20px; color:black; float:center;
+		margin-left:100px; margin-top:50px
+	}
+
+
+
+	div#box {
+		width:50px; height:50px;
+		margin-top:730px; 
+		border:0px solid black;
+		animation:fly1 5s;
+		animation-iteration-count:infinite;
+		/*animation-direction:alternate;*/
+		animation-delay:5s;
+	}
+	div#box img {width:120px; height:120px;}
+
+
+}

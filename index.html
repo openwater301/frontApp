@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="ko">
+ <head>
+  <meta charset="utf-8" />
+  <title>분식주문하기</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<script src="script/jquery-3.6.0.min.js"></script>
+<!-- <script src="script/script.js" defer></script> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<style>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      ul li {
+        list-style: none;
+      }
+      /* step1:상품리스트 */
+      div#step1 {
+        display: block;
+      }
+      div#step1 h3 {
+        /*제목:상품리스트*/
+        border: 0px solid black;
+        padding: 10px;
+      }
+      div#step1 ul#productList,
+      div#step1 ul#newsList {
+        border: 0px solid red;
+        width: 100%;
+        box-sizing: border-box;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+      div#step1 ul#productList::after,
+      div#step1 ul#newsList::after {
+        /*클리어픽스*/
+        content: "";
+        display: block;
+        clear: both;
+      }
+      div#step1 ul#productList li,
+      div#step1 ul#newsList li {
+        float: left;
+        width: 40%;
+        margin: 5% 5% 5% 5%;
+      }
+      div#step1 ul#productList li img,
+      div#step1 ul#newsList li img {
+        width: 150px;
+        height: 150px;
+        border: 0px solid black;
+      }
+      div#step1 p span {
+        /*상품명과 상품가격이 담김*/
+        display: block;
+        text-align: center;
+      }
+      /* step2 상품상세보기*/
+      div#step2 {
+        display: none;
+      }
+      div#step2 h3 {
+        /*제목:상품상세보기*/
+        border: 0px solid black;
+        padding: 10px;
+      }
+      div#step2 div.spec {
+        border: 0px solid blue;
+        padding: 20px;
+      }
+      div#step2 p {
+        padding: 10px;
+      }
+      div#step2 p button {
+        width: 30px;
+        height: 30px;
+        border-radius: 15px;
+        background-color: lightcyan;
+        border: 1px solid blue;
+      }
+
+      /* step3 장바구니보기*/
+      div#step3 {
+        display: none;
+      }
+      div#step3 div.orderAmount,
+      div#step3 div.orderAmount2,
+      div#step4 div.myOrder {
+        /*총합계 메세지*/
+        border: 1px solid blue;
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        font-weight: bold;
+        font-size: 25px;
+      }
+      div#step3 div.orderAmount span.total1,
+      div#step3 div.orderAmount2 span.total2,
+      div#step4 div.myOrder span.pay {
+        color: red;
+      }
+      div#step3 div.orderAmount span.txt,
+      div#step3 div.orderAmount2 span.txt2 {
+        display: block;
+      }
+      div#step3 div.orderAmount p.info,
+      div#step3 div.orderAmount2 p.info,
+      div#step4 div.myOrder p.info {
+        font-size: 14px;
+      }
+      div#step4 div.myOrder p.card {
+        border: 1px solid red;
+        height: 200px;
+        padding: 20px;
+      }
+
+      div.myCart,
+      div.myCart2 {
+        margin-left: 20px;
+        margin-right: 20px;
+        padding: 10px;
+        border: 1px solid gray;
+        border-radius: 10px;
+      }
+      div.myCart table,
+      div.myCart2 table {
+        width: 100%;
+        margin-bottom: 10px;
+        border: 1px solid lightgray;
+        border-collapse: collapse;
+      }
+      div.myCart table th,
+      div.myCart2 table th {
+        font-size: 15px;
+        padding: 2px;
+        background-color: beige;
+      }
+      div.myCart table th.first,
+      div.myCart2 table th.first {
+        width: 20px;
+      }
+      div.myCart table td,
+      div.myCart2 table td {
+        text-align: center;
+      }
+
+      /* step4 주문하기*/
+      div#step4 {
+        display: none;
+      }
+    </style>	
+</style>
+ </head>
+ <body>
+<!-- 모바일웹 첫화면 -->
+
+<!-- step1단계 상품선택하기 -->
+<div id="step1">
+	<h3>json데이터 상품리스트</h3>
+	<ul id="newsList"></ul>
+
+</div>
+<!-- //step1단계 상품선택하기 -->
+
+
+<!-- step2단계 선택상품 확인 및 담기 -->
+<div id="step2">
+
+	<h3>JSON상품상세보기</h3>
+	<div class="spec">
+	  <!-- 사용자가 선택한 상품 -->
+	  <img src=" " id="myfood2" alt="" />
+	  <!-- 사용자가 선택한 상품명 -->
+	  <p><span id="myfoodName2">상품명</span></p>
+	  <p><span id="myfoodPrice2">상품가격</span> 원</p>
+
+	  <p>
+		<button class="plus2">+</button>
+		<span class="count2">1</span>
+		<button class="minus2">-</button>
+	  </p>
+	  <p class="spec_is2">설명~~~~</p>
+	  <button class="pushCart2">장바구니 담기</button>
+	  <button class="goCart2">장바구니 가기</button>
+	  <a href="#step1" onClick="goStep1(); return false">상품리스트로 가기</a>
+	</div>
+
+
+</div>
+<!-- //step2단계 선택상품 확인 및 담기 -->
+
+
+
+
+
+<!-- step3단계 장바구니화면 -->
+<div id="step3">
+	<h3>장바구니</h3>	
+	<div class="zone">
+		<table border="1" cellspacing="0" cellpadding="0" class="shoppingCart">
+			<thead>
+				<tr>
+					<th class="first">&nbsp;</th>
+					<th>상품</th>
+					<th>상품명</th>
+					<th>가격</th>
+					<th class="last">수량</th>
+				</tr>
+			</thead>
+			<tbody class="shoppingCart_tbody">
+<!-- 				<tr> -->
+<!-- 					<td>&nbsp;</td> -->
+<!-- 					<td>&nbsp;</td> -->
+<!-- 					<td>&nbsp;</td> -->
+<!-- 					<td>&nbsp;</td> -->
+<!-- 					<td>&nbsp;</td> -->
+<!-- 				</tr> -->
+			</tbody>
+		</table>
+		<p>장바구니 비우기</p>
+	</div>
+	<div class="orderAmount">
+		<span class="txt1">주문(결재) 금액은</span>
+		<span class="totalSum">0</span>
+		<span class="txt2">원입니다</span>
+	</div>
+	<p><span class="card">카드</span> 또는 <span class="cash">현금</span>으로
+	선택해서<br> 결재 진행하세요</p>
+	<div class="buttonArea">
+		<button id="pay">결재하기</button>
+		<button class="cancle">취소하기</button>
+ 		<button class="gotoList">상품선택하기</button>
+	</div>
+</div>
+<!-- //step3단계 장바구니화면 -->
+
+
+<!-- step4단계 결재 -->
+<div id="step4">	
+	<h3>결재하기</h3>	
+	<div id="payOut">
+		<a href="#">
+			<img src="images/카드결재.png" alt="카드결재">
+			<span class="card">카드결재</span>
+		</a>		
+		<a href="#">
+			<img src="images/현금결재.png" alt="현금결재">
+			<span class="cash">현금결재</span>
+		</a>
+	</div>
+	<div class="orderAmount">
+		<span class="txt1">결재금액은</span>
+		<span class="totalSum">0</span>
+		<span class="txt2">원입니다</span>
+	</div>
+	<div class="buttonArea">
+		<button class="cancle">취소하기</button>
+	</div>
+</div>
+<!-- //step4단계 결재 -->
+
+
+<!-- step5단계 결재이용수단 -->
+<div id="store">
+	<a href="#">
+		<img src="images/매장.png" alt="매장"><span class="store">매장</span>
+	</a>
+</div>
+<div id="pack">
+	<a href="#">
+		<img src="images/포장.png" alt="포장"><span class="pack">포장</span>
+	</a>
+</div>
+<!-- //step5단계 결재이용수단 종료 -->
+
+
+<!-- step6단계 결재중 시작 -->
+<div id="step6">
+	<img src="images/카드투입구.png" alt="">
+	<p><span class="credit_card">신용카드</span>를 투입구에 꽃아주세요</p><br>
+	<p>결재가 끝날때까지 <span class="star">카드를 뽑지마세요</span></p>
+</div>
+<!-- //step6단계 결재중 종료 -->
+
+
+<!-- step7단계 결재완료 -->
+<div id="step7">
+	<p>감사합니다<br>결재가 완료되었습니다</p>
+</div>
+<!-- //step7단계 결재완료 종료 -->
+
+
+<script>
+	//HTML
+	let myfoodName = document.querySelector("#myfoodName"); //상품명
+	let myfoodPrice = document.querySelector("#myfoodPrice"); //상품가격
+	//JSON
+	let myfoodName2 = document.querySelector("#myfoodName2");
+	let myfoodPrice2 = document.querySelector("#myfoodPrice2");
+
+	let cart = []; //장바구니
+	let cart2 = []; //장바구니
+	let totalSum = 0; //장바구니에 담긴 모든합계
+	let totalSum2 = 0; //장바구니에 담긴 모든합계
+	let total1 = document.querySelector(".total1"); //모든합계표시
+	let total2 = document.querySelector(".total2"); //모든합계표시
+	let pay = document.querySelector(".pay"); //step4 주문금액표시
+
+	//사용자가 선택한 상품(이미지)
+	let myfood2 = document.getElementById("myfood2");
+	let myfood = document.getElementById("myfood");
+
+	//step2 상세설명영역
+	let spec_is = document.querySelector(".spec_is");
+	let spec_is2 = document.querySelector(".spec_is2");
+
+	//수량조정함수
+	let clickedCount = 1; //초기값
+	let count = document.querySelector(".count");
+	let plus = document.querySelector(".plus");
+	let minus = document.querySelector(".minus");
+
+	//JSON수량조정함수
+	let clickedCount2 = 1; //초기값
+	let count2 = document.querySelector(".count2");
+	let plus2 = document.querySelector(".plus2");
+	let minus2 = document.querySelector(".minus2");
+
+	//장바구니 테이블
+	let shoppingCart = document.querySelector(".shoppingCart_tbody");
+	let shoppingCart2 = document.querySelector(".shoppingCart_tbody2");
+
+	//장바구니담기버튼
+	let pushCart = document.querySelector(".pushCart");
+	let pushCart2 = document.querySelector(".pushCart2");
+
+	//상품리스트에서 상품을 클릭했을때 동작
+	$(function(){alert("jQuery ok 0922");
+	  function show(x) {
+	  //let imgSrc = $(this).attr("src"); //이미지경로
+	  let imgAlt = x.attr("alt"); //상품명
+	  let imgPrice = x.attr("title"); //가격정보
+
+	  if (imgAlt == "상품1") {
+		spec_is.innerHTML = `
+			  <p> 상품1의 설명은~~~      </p>
+		
+		`;
+	  } else if (imgAlt == "상품2") {
+		spec_is.innerHTML = `
+			  <p> 상품2의 설명은~~~      </p>
+		
+		`;
+	  } else if (imgAlt == "상품3") {
+		spec_is.innerHTML = `
+			  <p> 상품3의 설명은~~~      </p>
+		
+		`;
+	  } else if (imgAlt == "상품4") {
+		spec_is.innerHTML = `
+			  <p> 상품4의 설명은~~~      </p>
+		
+		`;
+	  } else if (imgAlt == "상품5") {
+		spec_is.innerHTML = `
+			  <p> 상품5의 설명은~~~      </p>
+		
+		`;
+	  } else if (imgAlt == "상품6") {
+		spec_is.innerHTML = `
+			  <p> 상품6의 설명은~~~      </p>
+		
+		`;
+	  }
+
+	  alert(imgSrc); //사용자가 선택한 상품
+
+	  myfood.setAttr("src", imgSrc); //상세보기에서 선택한상품을 보여준다
+	  //myfood.setAttribute("src", imgSrc); //상세보기에서 선택한상품을 보여준다
+	  myfoodName.innerText = imgAlt; //선택한 상품명을 보여준다
+	  //myfoodPrice.innerText = imgPrice; //선택한 상품가격정보를 보여준다
+
+	  document.getElementById("step1").style.display = "none";
+	  document.getElementById("step2").style.display = "block";
+	}		
+	});
+
+	// function show(x) {
+	//   let imgSrc = x.getAttribute("src"); //이미지경로
+	//   let imgAlt = x.getAttribute("alt"); //상품명
+	//   let imgPrice = x.getAttribute("title"); //가격정보
+
+	//   if (imgAlt == "상품1") {
+	// 	spec_is.innerHTML = `
+	// 		  <p> 상품1의 설명은~~~      </p>
+		
+	// 	`;
+	//   } else if (imgAlt == "상품2") {
+	// 	spec_is.innerHTML = `
+	// 		  <p> 상품2의 설명은~~~      </p>
+		
+	// 	`;
+	//   } else if (imgAlt == "상품3") {
+	// 	spec_is.innerHTML = `
+	// 		  <p> 상품3의 설명은~~~      </p>
+		
+	// 	`;
+	//   } else if (imgAlt == "상품4") {
+	// 	spec_is.innerHTML = `
+	// 		  <p> 상품4의 설명은~~~      </p>
+		
+	// 	`;
+	//   } else if (imgAlt == "상품5") {
+	// 	spec_is.innerHTML = `
+	// 		  <p> 상품5의 설명은~~~      </p>
+		
+	// 	`;
+	//   } else if (imgAlt == "상품6") {
+	// 	spec_is.innerHTML = `
+	// 		  <p> 상품6의 설명은~~~      </p>
+		
+	// 	`;
+	//   }
+
+	//   alert(imgSrc); //사용자가 선택한 상품
+
+	//   myfood.setAttribute("src", imgSrc); //상세보기에서 선택한상품을 보여준다
+	//   myfoodName.innerText = imgAlt; //선택한 상품명을 보여준다
+	//   myfoodPrice.innerText = imgPrice; //선택한 상품가격정보를 보여준다
+
+	//   document.getElementById("step1").style.display = "none";
+	//   document.getElementById("step2").style.display = "block";
+	// }
+
+	function show2(x) {alert("json상품클릭ok");
+	let z = x.src;
+	alert(z);
+	  let imgSrc2 = x.src; //이미지경로
+	  let imgAlt2 = x.alt; //상품명
+	  let imgPrice2 = x.title; //가격정보
+		
+	  if (imgAlt2 == "상품1") {
+		spec_is2.innerHTML = `
+			  <p> 상품1의 설명은~~~      </p>
+		
+		`;
+	  } else if (imgAlt2 == "상품2") {
+		spec_is2.innerHTML = `
+			  <p> 상품2의 설명은~~~      </p>
+		
+		`;
+	  } else if (imgAlt2 == "상품3") {
+		spec_is2.innerHTML = `
+			  <p> 상품3의 설명은~~~      </p>
+		
+		`;
+	  } else if (imgAlt2 == "상품4") {
+		spec_is2.innerHTML = `
+			  <p> 상품4의 설명은~~~      </p>
+		
+		`;
+	  } else if (imgAlt2 == "상품5") {
+		spec_is2.innerHTML = `
+			  <p> 상품5의 설명은~~~      </p>
+		
+		`;
+	  } else if (imgAlt2 == "상품6") {
+		spec_is2.innerHTML = `
+			  <p> 상품6의 설명은~~~      </p>
+		
+		`;
+	  }
+
+	  alert(imgSrc2);
+
+	  myfood2.setAttr("src", imgSrc2); //상세보기에서 선택한상품을 보여준다
+	  myfoodName2.innerText = imgAlt2; //선택한 상품명을 보여준다
+	  myfoodPrice2.innerText = imgPrice2; //선택한 상품가격정보를 보여준다
+
+	  document.getElementById("step1").style.display = "none";
+	  document.getElementById("step2").style.display = "block";
+	}
+
+	//step1으로 가는 함수
+	function goStep1() {
+	  document.getElementById("step1").style.display = "block";
+	  document.getElementById("step2").style.display = "none";
+	  document.getElementById("step3").style.display = "none";
+	  document.getElementById("step4").style.display = "none";
+	}
+
+	plus.addEventListener("click", function () {
+	  clickedCount += 1; //1더하기
+	  if (clickedCount > 10) {
+		alert("10개까지만 주문할 수 있습니다");
+		clickedCount = 10;
+	  } else {
+		count.textContent = clickedCount;
+	  }
+	});
+
+	minus.addEventListener("click", function () {
+	  clickedCount -= 1; //1빼기
+	  if (clickedCount < 1) {
+		alert("1개이상 주문할 수 있습니다");
+		clickedCount = 1;
+	  } else {
+		count.textContent = clickedCount;
+	  }
+	});
+
+	plus2.addEventListener("click", function () {
+	  clickedCount2 += 1; //1더하기
+	  if (clickedCount2 > 10) {
+		alert("10개까지만 주문할 수 있습니다");
+		clickedCount2 = 10;
+	  } else {
+		count2.textContent = clickedCount2;
+	  }
+	});
+
+	minus2.addEventListener("click", function () {
+	  clickedCount2 -= 1; //1빼기
+	  if (clickedCount2 < 1) {
+		alert("1개이상 주문할 수 있습니다");
+		clickedCount2 = 1;
+	  } else {
+		count2.textContent = clickedCount2;
+	  }
+	});
+
+	pushCart.addEventListener("click", function () {
+	  let goods1 = {
+		name: myfoodName.innerText,
+		price: myfoodPrice.innerText,
+		src: myfood.src,
+		count: clickedCount,
+	  };
+	  cart.push(goods1);
+	  let box = " ";
+	  for (var i in cart) {
+		with (cart[i]) {
+		  box +=
+			"상품명:" +
+			name +
+			"상품이미지:" +
+			src +
+			"가격:" +
+			price +
+			"수량:" +
+			count +
+			"\n";
+		}
+	  }
+	  alert(box);
+
+	  let num = cart.length - 1;
+	  //cart = cart.length;
+	  alert("cart.length에서 1을뺀값: " + num);
+	  shoppingCart.innerHTML += `
+		  <tr>
+			<td>${num + 1}</td>
+			<td>
+				<p>${cart[num].name}<p>
+				<p><img src="${
+				  cart[num].src
+				}" width="50" height="50" alt=""/></p>
+			  </td>
+			<td>${cart[num].price}</td>              
+			<td>${cart[num].count}</td>
+			<td>${cart[num].price * cart[num].count}원</td>              
+		  </tr>
+	  `;
+
+	  //합계가 들어갈영역--------------------
+	  totalSum += cart[num].price * cart[num].count;
+	  alert("장바구니 총합계: " + totalSum);
+	  total1.innerText = totalSum; //장바구니 총합계표시
+
+	  //로컬스토리지에 저장
+	  saveToLocal(goods1); //로컬스토리지에 저장하는 함수실행
+	});
+
+	//json
+	pushCart2.addEventListener("click", function () {
+	  let goods2 = {
+		name: myfoodName2.innerText,
+		price: myfoodPrice2.innerText,
+		src: myfood2.src,
+		count: clickedCount2,
+	  };
+	  cart2.push(goods2);
+	  let box2 = " ";
+	  for (var i in cart2) {
+		with (cart2[i]) {
+		  box2 +=
+			"상품명:" +
+			name +
+			"상품이미지:" +
+			src +
+			"가격:" +
+			price +
+			"수량:" +
+			count +
+			"\n";
+		}
+	  }
+	  alert(box2);
+
+	  //cart.length 카트의 담긴 수 , 배열 0번째자리부터 담기
+	  let num2 = cart2.length - 1;
+	  alert("cart2.length에서 1을뺀값: " + num2);
+
+	  shoppingCart2.innerHTML += `
+		  <tr>
+			<td>${num2 + 1}</td>
+			<td>
+				<p>${cart2[num2].name}<p>
+				<p><img src="${
+				  cart2[num2].src
+				}" width="50" height="50" alt=""/></p>
+			  </td>
+			<td>${cart2[num2].price}</td>              
+			<td>${cart2[num2].count}</td>
+			<td>${cart2[num2].price * cart2[num2].count}원</td>              
+		  </tr>
+	  `;
+
+	  //합계가 들어갈영역--------------------
+	  totalSum2 += cart2[num2].price * cart2[num2].count;
+	  alert("장바구니 총합계: " + totalSum2);
+	  total2.innerText = totalSum2; //장바구니 총합계표시
+	  pay.innerText = totalSum2; //주문시 총합계표시
+
+	  //로컬스토리지에 저장
+	  saveToLocal2(goods2); //로컬스토리지에 저장하는 함수실행
+	});
+
+	//로컬스토리지에 저장함수
+	function saveToLocal2(todo) {
+	  alert("json장바구니상품 로컬스토리지에 담기ok");
+	  let todos2; //로컬스토리지에 객체를 담을 배열
+	  if (localStorage.getItem("todos2") === null) {
+		todos2 = []; //배열초기화
+	  } else {
+		todos2 = JSON.parse(localStorage.getItem("todos2"));
+	  }
+	  todos2.push(todo);
+	  localStorage.setItem("todos2", JSON.stringify(todos2));
+	}
+	function saveToLocal(todo) {
+	  let todos; //로컬스토리지에 객체를 담을 배열
+	  if (localStorage.getItem("todos") === null) {
+		todos = []; //배열초기화
+	  } else {
+		todos = JSON.parse(localStorage.getItem("todos"));
+	  }
+	  todos.push(todo);
+	  localStorage.setItem("todos", JSON.stringify(todos));
+	}
+
+	document.addEventListener("DOMContentLoaded", getLocal1); //
+	document.addEventListener("DOMContentLoaded", getLocal2); //
+	//로컬스토리지에 담긴데이터 가져오기
+	function getLocal2(todo) {
+	  let todos2; //로컬스토리지에 객체를 담을 배열
+	  if (localStorage.getItem("todos2") === null) {
+		todos2 = []; //배열초기화
+	  } else {
+		todos2 = JSON.parse(localStorage.getItem("todos2"));
+		cart2 = todos2; //추가 9.20
+	  }
+	  todos2.forEach(function (i) {
+		let f = 0; //변수  상품을 담을때 객체1씩
+		do {
+		  i.name = todos2[f].name;
+		  i.src = todos2[f].src;
+		  i.price = todos2[f].price;
+		  i.count = todos2[f].count;
+		  f++;
+		  //html테이블에 담을 코드
+		  shoppingCart2.innerHTML += `
+				  <tr>
+				  <td>${f}</td>
+				  <td>
+					  <p>${i.name}<p>
+					  <p><img src="${
+						i.src
+					  }" width="50" height="50" alt=""/></p>
+					  </td>
+				  <td>${i.price}</td>              
+				  <td>${i.count}</td>
+				  <td>${i.price * i.count}원</td>              
+				  </tr>
+			  `;
+		  totalSum2 += i.price * i.count;
+		  alert("json장바구니 총합계: " + totalSum2);
+		  total2.innerText = totalSum2; //장바구니 총합계표시
+		  pay.innerText = totalSum2; //주문시 총합계표시
+		} while (f < todos2.length + 1);
+	  });
+	}
+
+	function getLocal1(todo) {
+	  let todos; //로컬스토리지에 객체를 담을 배열
+	  if (localStorage.getItem("todos") === null) {
+		todos = []; //배열초기화
+	  } else {
+		todos = JSON.parse(localStorage.getItem("todos"));
+		cart = todos; //추가 9.20
+	  }
+	  todos.forEach(function (i) {
+		let f = 0; //변수  상품을 담을때 객체1씩
+		do {
+		  i.name = todos[f].name;
+		  i.src = todos[f].src;
+		  i.price = todos[f].price;
+		  i.count = todos[f].count;
+		  f++;
+		  shoppingCart.innerHTML += `
+				  <tr>
+				  <td>${f}</td>
+				  <td>
+					  <p>${i.name}<p>
+					  <p><img src="${
+						i.src
+					  }" width="50" height="50" alt=""/></p>
+					  </td>
+				  <td>${i.price}</td>              
+				  <td>${i.count}</td>
+				  <td>${i.price * i.count}원</td>              
+				  </tr>
+			  `;
+		  totalSum += i.price * i.count;
+		  alert("총합계: " + totalSum);
+		  total1.innerText = totalSum; //장바구니 총합계표시
+		} while (f < todos.length + 1);
+	  });
+	}
+
+	let goCart3 = document.querySelector(".goCart3");
+	goCart3.addEventListener("click", function () {
+	  document.getElementById("step1").style.display = "none";
+	  document.getElementById("step2").style.display = "none";
+	  document.getElementById("step3").style.display = "block";
+	});
+	let goCart2 = document.querySelector(".goCart2");
+	goCart2.addEventListener("click", function () {
+	  document.getElementById("step1").style.display = "none";
+	  document.getElementById("step2").style.display = "none";
+	  document.getElementById("step3").style.display = "block";
+	});
+
+	let goCart = document.querySelector(".goCart");
+	goCart.addEventListener("click", function () {
+	  document.getElementById("step1").style.display = "none";
+	  document.getElementById("step2").style.display = "none";
+	  document.getElementById("step3").style.display = "block";
+	}); //9.15
+
+	let delCart1 = document.querySelector(".delCart1"); //장바구니1삭제하는 버튼
+	let delCart2 = document.querySelector(".delCart2"); //장바구니2삭제하는 버튼
+	delCart2.addEventListener("click", function () {
+	  //장바구니2삭제시 동작
+	  //cart.length;
+	  if (cart2.length >= 1) {
+		//담아놓은상품이 1개이상 있을경우 삭제
+		let cleanCart2 = confirm("장바구니상품들을 삭제하겠습니까?");
+		if (cleanCart2 == 1) {
+		  shoppingCart2.textContent = "";
+		  totalSum2 = 0;
+		  total2.innerText = totalSum2; //표시
+		  pay.innerText = totalSum2; //주문시 총합계표시
+		  cart2 = [];
+		  alert("삭제후 cart.length: " + cart2.length);
+
+		  localStorage.setItem("todos2", JSON.stringify(cart2)); //
+		  alert("로컬todos2.length: " + todos2.length);
+		} else {
+		  alert("취소했습니다");
+		}
+	  } else {
+		//담아놓은상품이 없을경우
+		alert("담아놓은상품이 없습니다");
+	  }
+	});
+	delCart1.addEventListener("click", function () {
+	  //장바구니1삭제시 동작
+	  //cart.length;
+	  if (cart.length >= 1) {
+		let cleanCart = confirm("장바구니상품들을 삭제하겠습니까?");
+		if (cleanCart == 1) {
+		  //담아놓은상품이 1개이상 있을경우 삭제
+		  shoppingCart.textContent = "";
+		  totalSum = 0;
+		  total1.innerText = totalSum; //표시
+		  cart = [];
+		  alert("삭제후 cart.length: " + cart.length);
+
+		  localStorage.setItem("todos", JSON.stringify(cart)); //
+		  alert("로컬todos.length: " + todos.length);
+		} else {
+		  alert("취소했습니다");
+		}
+	  } else {
+		//담아놓은상품이 없을경우
+		alert("담아놓은상품이 없습니다");
+	  }
+	});
+
+	let order1 = document.querySelector(".order1");
+	let order2 = document.querySelector(".order2");
+	order1.addEventListener("click", function () {
+	  document.getElementById("step1").style.display = "none";
+	  document.getElementById("step2").style.display = "none";
+	  document.getElementById("step3").style.display = "none";
+	  document.getElementById("step4").style.display = "block";
+	});
+	order2.addEventListener("click", function () {
+	  document.getElementById("step1").style.display = "none";
+	  document.getElementById("step2").style.display = "none";
+	  document.getElementById("step3").style.display = "none";
+	  document.getElementById("step4").style.display = "block";
+	});
+  </script>
+<script src="./script/fetch.js"></script>
+ </body>
+</html>
